@@ -1,20 +1,32 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import Navigation from './src/navigation';
+import { Amplify } from 'aws-amplify';
+import { withAuthenticator } from 'aws-amplify-react-native';
+import awsconfig from './src/aws-exports';
+import AuthContextProvider from './src/context/AuthContext';
+import OrderContextProvider from './src/context/OrderContext';
+import {LogBox} from 'react-native'
 
-export default function App() {
+YellowBox.ignoreLogs(['Setting a timer'])
+
+Amplify.configure({ ...awsconfig, Analytics: { disabled: true } });
+
+function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer>
+        <AuthContextProvider>
+          <OrderContextProvider>
+          <Navigation />
+          </OrderContextProvider>
+        </AuthContextProvider>
+
+        <StatusBar style="auto" />
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default withAuthenticator(App);

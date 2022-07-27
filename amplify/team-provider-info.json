@@ -1,0 +1,20 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-goteckv2-staging-151511-authRole",
+      "UnauthRoleArn": "arn:aws:iam::347353174505:role/amplify-goteckv2-staging-151511-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::347353174505:role/amplify-goteckv2-staging-151511-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-goteckv2-staging-151511-deployment",
+      "UnauthRoleName": "amplify-goteckv2-staging-151511-unauthRole",
+      "StackName": "amplify-goteckv2-staging-151511",
+      "StackId": "arn:aws:cloudformation:eu-central-1:347353174505:stack/amplify-goteckv2-staging-151511/be731f90-0cf5-11ed-82e6-061df6546618",
+      "AmplifyAppId": "drgscinnxjmch"
+    },
+    "categories": {
+      "auth": {
+        "GoTeckv2": {}
+      }
+    }
+  }
+}
