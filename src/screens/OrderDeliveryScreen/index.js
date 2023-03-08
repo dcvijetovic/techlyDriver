@@ -26,7 +26,7 @@ const OrderDeliveryScreen = () => {
 
   const navigation = useNavigation();
   const route = useRoute();
-  const id = route.params?.id;
+  const id = route?.params?.id;
 
   useEffect(() => {
     fetchOrder(id);
@@ -37,9 +37,9 @@ const OrderDeliveryScreen = () => {
       return;
     }
     DataStore.save(
-      Courier.copyOf(dbCourier, (update) => {
-        updated.lat = driverLocation.latitude;
-        updated.lng = driverLocation.longitude;
+      Courier.copyOf(dbCourier, (updated) => {
+        updated.lat = driverLocation?.latitude;
+        updated.lng = driverLocation?.longitude;
       })
     );
   }, [driverLocation]);
@@ -77,16 +77,16 @@ const OrderDeliveryScreen = () => {
 
   const driverFocus = () => {
     mapRef.current.animateToRegion({
-      latitude: driverLocation.latitude,
-      longitude: driverLocation.longitude,
+      latitude: driverLocation?.latitude,
+      longitude: driverLocation?.longitude,
       latitudeDelta: 0.01,
       longitudeDelta: 0.01,
     });
   };
 
-  const shopLocation = {
-    latitude: order?.Shop?.lat,
-    longitude: order?.Shop?.lng,
+  const businessLocation = {
+    latitude: order?.Business?.lat,
+    longitude: order?.Business?.lng,
   };
   const userLocation = {
     latitude: user?.lat,
@@ -105,8 +105,8 @@ const OrderDeliveryScreen = () => {
         showsUserLocation
         followUserLocation
         initialRegion={{
-          latitude: driverLocation.latitude,
-          longitude: driverLocation.longitude,
+          latitude: driverLocation?.latitude,
+          longitude: driverLocation?.longitude,
           latitudeDelta: 0.07,
           longitudeDelta: 0.07,
         }}
@@ -114,19 +114,23 @@ const OrderDeliveryScreen = () => {
         <MapViewDirections
           origin={driverLocation}
           destination={
-            order.status === 'ACCEPTED' ? shopLocation : userLocation
-          }
+            (order.order_status === 'STORE_READY' || 'STORE_PROBLEM' ? businessLocation : userLocation) 
+            // (order.order_status === 'STORE_ACCEPTED' ? userLocation : businessLocation)
+          } 
           strokeWidth={8}
-          waypoints={order.status === 'READY_FOR_PICKUP' ? [shopLocation] : []}
+          waypoints={order?.order_status === 'STORE_READY' ? [businessLocation] : [userLocation]}
+          
+          
+          //: 'READY4PicupUSER' ? [userLocation] : []
           strokeColor="#3fc060"
           apikey={'AIzaSyAM_2sQVTSb-HP_CkFpRL5Nv6p_6eQTKKs'}
           onReady={(result) => {
-            setDeliveryDuration(result.duration);
-            setDeliveryDistance(result.distance);
+            setDeliveryDuration(result?.duration);
+            setDeliveryDistance(result?.distance);
           }}
         />
 
-        <CustomMarker data={order.Shop} type="SHOP" />
+        <CustomMarker data={order?.Business} type="SHOP" />
 
         <CustomMarker data={user} type="USER" />
       </MapView>
@@ -137,7 +141,7 @@ const OrderDeliveryScreen = () => {
         onAccept={driverFocus}
       />
 
-      {order.status === 'READY_FOR_PICKUP' && (
+      {/* {order?.order_status === 'STORE_READY' && ( */}
         <Ionicons
           onPress={() => navigation.goBack()}
           name="arrow-back-circle"
@@ -145,7 +149,7 @@ const OrderDeliveryScreen = () => {
           color="black"
           style={{ top: 50, left: 20, position: 'absolute' }}
         />
-      )}
+      {/* )} */}
     </View>
   );
 };

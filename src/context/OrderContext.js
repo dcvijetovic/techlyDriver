@@ -1,6 +1,6 @@
 import { Auth, DataStore } from 'aws-amplify';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { Courier, Order, User, OrderProduct } from '../models';
+import { Courier, Order, User, OrderItems } from '../models';
 import { useAuthContext } from './AuthContext';
 
 const OrderContext = createContext({});
@@ -21,8 +21,8 @@ const OrderContextProvider = ({ children }) => {
 
     DataStore.query(User, fetchedOrder.userID).then(setUser);
 
-    DataStore.query(OrderProduct, (op) =>
-      op.orderID('eq', fetchedOrder.id)
+    DataStore.query(OrderItems, (oi) =>
+      oi.orderID('eq', fetchedOrder.id)
     ).then(setProducts);
   };
 
@@ -45,7 +45,7 @@ const OrderContextProvider = ({ children }) => {
   const acceptOrder = async () => {
     const updatedOrder = await DataStore.save(
       Order.copyOf(order, (updated) => {
-        updated.status = 'ACCEPTED';
+        updated.order_status = 'STORE_ACCEPTED' || 'STORE_READY';
         updated.Courier = dbCourier;
       })
     );
@@ -56,7 +56,7 @@ const OrderContextProvider = ({ children }) => {
     // update order, change status, assign courier
     const updatedOrder = await DataStore.save(
       Order.copyOf(order, (updated) => {
-        updated.status = 'PICKED_UP';
+        updated.order_status = 'PICKED_UP';
       })
     );
     setOrder(updatedOrder);
@@ -66,7 +66,7 @@ const OrderContextProvider = ({ children }) => {
     // update order, change status
     const updatedOrder = await DataStore.save(
       Order.copyOf(order, (updated) => {
-        updated.status = 'COMPLETED';
+        updated.order_status = 'COMPLETED';
       })
     );
     setOrder(updatedOrder);

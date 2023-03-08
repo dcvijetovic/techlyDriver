@@ -20,9 +20,9 @@ const ProfileScreen = () => {
   const { dbCourier, sub, setdbCourier } = useAuthContext();
 
   const [name, setName] = useState(dbCourier?.name || '');
-  const [transportationMode, setTransportationMode] = useState(
-    TransportationModes.DRIVING
-  );
+  // const [transportationMode, setTransportationMode] = useState(
+  //   TransportationModes.DRIVING
+  // );
 
   const navigation = useNavigation();
 
@@ -39,7 +39,7 @@ const ProfileScreen = () => {
     const courier = await DataStore.save(
       Courier.copyOf(dbCourier, (updated) => {
         updated.name = name;
-        updated.transportationMode = transportationMode;
+        // updated.transportationMode = transportationMode;
       })
     );
     setdbCourier(courier);
@@ -51,7 +51,7 @@ const ProfileScreen = () => {
         new Courier({
           name,
           sub,
-          transportationMode,
+          // transportationMode,
         })
       );
       setdbCourier(courier);
@@ -70,7 +70,7 @@ const ProfileScreen = () => {
         style={styles.input}
       />
 
-      <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+      {/* <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
         <Pressable
           onPress={() => setTransportationMode(TransportationModes.BICYCLING)}
           style={{
@@ -96,7 +96,7 @@ const ProfileScreen = () => {
           >
             Bike
           </Text>
-          {/* <MateralIcons name="pedal-bike" size={40} color="white" /> */}
+          <MateralIcons name="pedal-bike" size={40} color="white" />
         </Pressable>
         <Pressable
           onPress={() => setTransportationMode(TransportationModes.DRIVING)}
@@ -123,9 +123,9 @@ const ProfileScreen = () => {
           >
             Car
           </Text>
-          {/* <FontAwsome5 name="car" size={40} color="white" /> */}
+          {/* <FontAwsome5 name="car" size={40} color="white" /> 
         </Pressable>
-      </View>
+      </View> */}
 
       <Button onPress={onSave} title="Save" />
       <Button onPress={() => Auth.signOut()} title="Logout" />

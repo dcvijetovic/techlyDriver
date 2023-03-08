@@ -1,19 +1,19 @@
 {
   "staging": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-goteckv2-staging-151511-authRole",
-      "UnauthRoleArn": "arn:aws:iam::347353174505:role/amplify-goteckv2-staging-151511-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::347353174505:role/amplify-goteckv2-staging-151511-authRole",
-      "Region": "eu-central-1",
-      "DeploymentBucketName": "amplify-goteckv2-staging-151511-deployment",
-      "UnauthRoleName": "amplify-goteckv2-staging-151511-unauthRole",
-      "StackName": "amplify-goteckv2-staging-151511",
-      "StackId": "arn:aws:cloudformation:eu-central-1:347353174505:stack/amplify-goteckv2-staging-151511/be731f90-0cf5-11ed-82e6-061df6546618",
-      "AmplifyAppId": "drgscinnxjmch"
+      "AuthRoleName": "amplify-techly-staging-113341-authRole",
+      "UnauthRoleArn": "arn:aws:iam::528141356647:role/amplify-techly-staging-113341-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::528141356647:role/amplify-techly-staging-113341-authRole",
+      "Region": "us-west-1",
+      "DeploymentBucketName": "amplify-techly-staging-113341-deployment",
+      "UnauthRoleName": "amplify-techly-staging-113341-unauthRole",
+      "StackName": "amplify-techly-staging-113341",
+      "StackId": "arn:aws:cloudformation:us-west-1:528141356647:stack/amplify-techly-staging-113341/68da3a30-3a6a-11ed-8539-0232e9fba41d",
+      "AmplifyAppId": "d5r86hxq01ygw"
     },
     "categories": {
       "auth": {
-        "GoTeckv2": {}
+        "Techly": {}
       }
     }
   }

@@ -7,9 +7,11 @@ import { useOrderContext } from '../../context/OrderContext';
 import { useNavigation } from '@react-navigation/native';
 
 const BUTTON_TITLE = {
-  READY_FOR_PICKUP: 'Accept Order',
-  ACCEPTED: 'Pick-up order',
-  PICKED_UP: 'Complete Delivery',
+  // STORE_READY: 'Accept Order',
+  USER_READY: 'Accept Order',
+  USER_PICKEDUP: 'Complete Delivery',
+  STORE_READY: 'Accept order',
+  STORE_PICKEDUP: 'Complete Delivery',
 };
 
 const BottomSheetDetails = (props) => {
@@ -25,17 +27,31 @@ const BottomSheetDetails = (props) => {
   const navigation = useNavigation()
 
   const onButtonPress = async () => {
-    const { status } = order;
-    if (status === 'READY_FOR_PICKUP') {
+    const { order_status } = order;
+    if (order_status === 'STORE_ACCEPTED') {
       bottomSheetRef.current?.collapse();
       await acceptOrder()
       onAccept();
     }
-    else if (status === 'ACCEPTED') {
+    else if (order_status === 'STORE_READY'){
+      bottomSheetRef.current?.collapse();
+      await acceptOrder()
+      onAccept();
+    }
+    else if (order_status === 'USER_PICKUP') {
       bottomSheetRef.current?.collapse();
       await pickUpOrder();
     }
-    else if (status === 'PICKED_UP') {
+    else if (order_status === 'USER_PICKEDUP') {
+      await completeOrder();
+      bottomSheetRef.current?.collapse();
+      navigation.goBack();
+    }
+    else if (order_status === 'STORE_PICKUP'){
+      bottomSheetRef.current?.collapse();
+      await pickUpOrder();
+    }
+    else if (order_status === 'STORE_PICKEDUP') {
       await completeOrder();
       bottomSheetRef.current?.collapse();
       navigation.goBack();
@@ -43,11 +59,11 @@ const BottomSheetDetails = (props) => {
   };
 
   const disableButton = () => {
-    const { status } = order;
-    if (status === 'READY_FOR_PICKUP') {
+    const { order_status } = order;
+    if (order_status === 'USER_READY' || 'STORE_READY') {
       return false;
     }
-    if ((status === 'ACCEPTED' || status === 'PICKED_UP') && driverClose) {
+    if ((order_status === 'USER_PICKUP' || order_status === 'USER_PICKEDUP') && driverClose) {
       return false;
     }
     return true;
@@ -70,19 +86,22 @@ const BottomSheetDetails = (props) => {
         </Text>
       </View>
       <View style={styles.deliveryDetailsContainer}>
-        <Text style={styles.shopName}>{order.Shop.name}</Text>
+        {/* <Text style={styles.shopName}>Pickup: {order?.Business?.name}</Text> */}
         <View style={styles.addressContainer}>
           <Fontisto name="shopping-store" size={22} color="#666" />
-          <Text style={styles.addressText}>{order.Shop.address}</Text>
+          <Text style={styles.addressText}>Pickup address: {order?.Business?.address}</Text>
         </View>
         <View style={styles.addressContainer}>
-          <Text style={styles.addressText}>{user?.address}</Text>
+          <Text style={styles.addressText}>Delivery address: {user?.address}</Text>
+        </View>
+        <View>
+          <Text>{order.order_status}</Text>
         </View>
 
         <View style={styles.orderDetailsContainer}>
           {products?.map((product) => (
             <Text style={styles.orderItemText} key={product.id}>
-              {product.Product.name} x{product.quantity}
+              {product?.Product?.name} x{product?.quantity}
             </Text>
           ))}
         </View>
@@ -95,7 +114,7 @@ const BottomSheetDetails = (props) => {
           backgroundColor: disableButton() ? '#666' : '#3FC060',
         }}
       >
-        <Text style={styles.buttonText}>{BUTTON_TITLE[order.status]}</Text>
+        <Text style={styles.buttonText}>{BUTTON_TITLE[order.order_status]}</Text>
       </Pressable>
     </BottomSheet>
   );

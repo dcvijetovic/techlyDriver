@@ -1,5 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Text, View, useWindowDimensions, ActivityIndicator } from 'react-native';
+import {
+  Text,
+  View,
+  useWindowDimensions,
+  ActivityIndicator,
+} from 'react-native';
 import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import OrderItem from '../../components/OrderItem';
 import MapView from 'react-native-maps';
@@ -10,7 +15,7 @@ import CustomMarker from '../../components/CustomMarker';
 
 const OrdersScreen = () => {
   const [orders, setOrders] = useState([]);
-  const [driverLocation, setDriverLocation] = useState(null)
+  const [driverLocation, setDriverLocation] = useState(null);
 
   const bottomSheetRef = useRef(null);
   const { width, height } = useWindowDimensions();
@@ -19,8 +24,20 @@ const OrdersScreen = () => {
 
   const fetchOrders = () => {
     DataStore.query(Order, (order) =>
-      order.status('eq', 'READY_FOR_PICKUP')
-    ).then(setOrders);
+      order.or((orderStatus) =>
+      orderStatus
+        // .order_status('eq', 'NEW')
+        .order_status('eq', 'STORE_ACCEPTED')
+        .order_status('eq', 'STORE_READY')
+        // .order_status('eq', 'USER_PICKUP')
+        // .order_status('eq', 'USER_PICKED_UP')
+        // .order_status('eq', 'STORE_QUEUED')
+        // .order_status('eq', 'STORE_INPROGRESS')
+        // .order_status('eq', 'STORE_PROBLEM')
+        // .order_status('eq', 'STORE_READY')
+    )
+).then(setOrders)
+    
   };
 
   useEffect(() => {
@@ -52,7 +69,7 @@ const OrdersScreen = () => {
     getDeliveryLocations();
   }, []);
 
-  if(!driverLocation) {
+  if (!driverLocation) {
     return <ActivityIndicator size={'large'} color="gray" top={50} />;
   }
 
@@ -73,7 +90,7 @@ const OrdersScreen = () => {
         }}
       >
         {orders.map((order) => (
-          <CustomMarker key={order.id} data={order.Shop} type="SHOP" />
+          <CustomMarker key={order.id} data={order.Business} type="SHOP" />
         ))}
       </MapView>
       <BottomSheet ref={bottomSheetRef} index={1} snapPoints={snapPoints}>

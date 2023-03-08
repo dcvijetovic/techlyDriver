@@ -25,7 +25,7 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   addressText: {
-    fontSize: 20,
+    fontSize: 15,
     color: '#666',
     marginLeft: 15,
   },

@@ -7,9 +7,9 @@ import { withAuthenticator } from 'aws-amplify-react-native';
 import awsconfig from './src/aws-exports';
 import AuthContextProvider from './src/context/AuthContext';
 import OrderContextProvider from './src/context/OrderContext';
-import {LogBox} from 'react-native'
+import { LogBox } from 'react-native';
 
-YellowBox.ignoreLogs(['Setting a timer'])
+LogBox.ignoreLogs(['Setting a timer']);
 
 Amplify.configure({ ...awsconfig, Analytics: { disabled: true } });
 
@@ -19,7 +19,7 @@ function App() {
       <NavigationContainer>
         <AuthContextProvider>
           <OrderContextProvider>
-          <Navigation />
+            <Navigation />
           </OrderContextProvider>
         </AuthContextProvider>
 

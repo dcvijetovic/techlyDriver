@@ -6,12 +6,12 @@ import { DataStore } from 'aws-amplify';
 import { User } from '../../models';
 
 const OrderItem = ({ order }) => {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
   const navigation = useNavigation();
 
-  useEffect(()=> {
-    DataStore.query(User, order.userID).then(setUser)
-  }, [])
+  useEffect(() => {
+    DataStore.query(User, order?.userID).then(setUser);
+  }, []);
 
   return (
     <Pressable
@@ -26,24 +26,40 @@ const OrderItem = ({ order }) => {
         navigation.navigate('OrderDeliveryScreen', { id: order.id })
       }
     >
-      <Image
-        source={{ uri: order.Shop.image }}
+      {/* <Image
+        source={{ uri: order?.Business?.image }}
         style={{
           width: '25%',
           height: '100%',
           borderTopLeftRadius: 10,
           borderBottomLeftRadius: 10,
         }}
-      />
+      /> */}
       <View style={{ flex: 1, marginLeft: 10, paddingVertical: 5 }}>
-        <Text style={{ fontSize: 18, fontWeight: '500' }}>
-          {order.Shop.name}
+        <Text style={{ marginVertical: 5 }}>
+          {order?.order_status === 'STORE_ACCEPTED' && (
+            <Text>Customer pickup address:</Text>
+          )}
+          {order?.order_status === 'STORE_READY'  && (
+            <Text>Store pickup: {order?.Business?.name}</Text>
+          )}
         </Text>
-        <Text style={{ color: '#666' }}>{order.Shop.address}</Text>
+        <Text style={{ color: '#666', marginBottom: 10 }}>
+          {order?.order_status === 'STORE_ACCEPTED' && (
+            
+            <Text>{user?.first_name} {user?.last_name}, {user?.address}</Text>
+          )}
+          {order?.order_status === 'STORE_READY'  && (
+            <Text>{order?.Business?.address}</Text>
+          )}
+        </Text>
+        {/* <Text>{order?.order_status}</Text> */}
+        <Text style={{ marginVertical: 5 }}>Delivery address:</Text>
+        {order?.order_status === 'STORE_ACCEPTED' && (<Text style={{ color: '#666', marginBottom: 5 }}>{order?.Business?.name}</Text>)} 
+        {order?.order_status === 'STORE_ACCEPTED' && (<Text style={{ color: '#666', marginBottom: 5 }}>{order?.Business?.address}</Text>)}
 
-        <Text style={{ marginTop: 10 }}>Delivery Details:</Text>
-        <Text style={{ color: '#666' }}>{user?.name}</Text>
-        <Text style={{ color: '#666' }}>{user?.address}</Text>
+        {order?.order_status === 'STORE_READY'  && (<Text style={{ color: '#666', marginBottom: 5 }}>{user?.first_name} {user?.last_name}</Text>)} 
+        {order?.order_status === 'STORE_READY'  && (<Text style={{ color: '#666', marginBottom: 5 }}>{user?.address}</Text>)}
       </View>
       <View
         style={{

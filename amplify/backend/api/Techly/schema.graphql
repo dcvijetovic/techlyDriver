@@ -1,0 +1,133 @@
+enum ProductAvailable {
+  AVAILABLE
+  OUT_OF_STOCK
+}
+
+enum CourierOnline {
+  ONLINE
+  OFFLINE
+}
+
+enum BusinessOnline {
+  ONLINE
+  OFFLINE
+  BUSY
+}
+
+type OrderItems @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  quantity: Int!
+  Product: Product @hasOne
+  orderID: ID! @index(name: "byOrder")
+}
+
+type ShoppingSession @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  CartItems: [CartItem] @hasMany(indexName: "byShoppingSession", fields: ["id"])
+  userID: ID! @index(name: "byUser")
+  businessID: ID! @index(name: "byBusiness")
+}
+
+type CartItem @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  quantity: Int!
+  shoppingsessionID: ID! @index(name: "byShoppingSession")
+  Product: Product @hasOne
+}
+
+type Courier @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  first_name: String!
+  last_name: String!
+  sub: String!
+  lat: Float
+  lng: Float
+  available: CourierOnline
+}
+
+enum OrderStatus {
+  NEW
+  STORE_ACCEPTED
+  STORE_DECLINED
+  USER_PICKUP
+  USER_PICKEDUP
+  STORE_QUEUED
+  STORE_INPROGRESS
+  STORE_PROBLEM
+  STORE_READY
+  STORE_PICKUP
+  STORE_PICKEDUP
+  DELIVERED
+}
+
+type Order @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  total: Float!
+  user_notes: String
+  order_status: OrderStatus!
+  payment_status: String
+  userID: ID! @index(name: "byUser")
+  Business: Business @hasOne
+  OrderItems: [OrderItems] @hasMany(indexName: "byOrder", fields: ["id"])
+  Courier: Courier @hasOne
+}
+
+type DeliveryFee @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  price: Float!
+}
+
+type ServiceFee @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  price: Float!
+}
+
+type Product @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  description: String
+  image: String!
+  SKU: String!
+  price: Float!
+  businessID: ID! @index(name: "byBusiness")
+  available: ProductAvailable
+}
+
+type User @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  first_name: String!
+  last_name: String!
+  phone: String!
+  sub: String!
+  address: String!
+  lat: Float!
+  lng: Float!
+  address_details: String
+  courier_notes: String
+  ShoppingSessions: [ShoppingSession] @hasMany(indexName: "byUser", fields: ["id"])
+  Orders: [Order] @hasMany(indexName: "byUser", fields: ["id"])
+}
+
+type Business @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  company: String!
+  address: String!
+  lat: Float!
+  lng: Float!
+  image: String!
+  adminSub: String!
+  phone: String!
+  email: String!
+  website: String
+  description: String!
+  business_hours: String
+  delivery_time_min: Int
+  delivery_time_max: Int
+  Products: [Product] @hasMany(indexName: "byBusiness", fields: ["id"])
+  ShoppingSessions: [ShoppingSession] @hasMany(indexName: "byBusiness", fields: ["id"])
+  available: BusinessOnline
+}
+ 

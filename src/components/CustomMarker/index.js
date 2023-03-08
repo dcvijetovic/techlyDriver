@@ -5,9 +5,9 @@ import { Entypo } from '@expo/vector-icons';
 const CustomMarker = ({ data, type }) => {
   return (
     <Marker
-      coordinate={{ latitude: data.lat, longitude: data.lng }}
-      title={data.name}
-      description={data.address}
+      coordinate={{ latitude: data?.lat, longitude: data?.lng }}
+      title={data?.name}
+      description={data?.address}
     >
       <View style={{ backgroundColor: 'green', padding: 5, borderRadius: 50 }}>
         {
@@ -15,7 +15,7 @@ const CustomMarker = ({ data, type }) => {
             <Entypo name="shop" size={24} color="#fff" />
           ) : (
             <Entypo name="shop" size={24} color="#fff" />
-          ) // change into USER icon
+          ) 
         }
       </View>
     </Marker>

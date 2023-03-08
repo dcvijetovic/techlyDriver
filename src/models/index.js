@@ -2,31 +2,52 @@
 import { initSchema } from '@aws-amplify/datastore';
 import { schema } from './schema';
 
-const TransportationModes = {
-  "DRIVING": "DRIVING",
-  "BICYCLING": "BICYCLING"
+const ProductAvailable = {
+  "AVAILABLE": "AVAILABLE",
+  "OUT_OF_STOCK": "OUT_OF_STOCK"
+};
+
+const CourierOnline = {
+  "ONLINE": "ONLINE",
+  "OFFLINE": "OFFLINE"
+};
+
+const BusinessOnline = {
+  "ONLINE": "ONLINE",
+  "OFFLINE": "OFFLINE",
+  "BUSY": "BUSY"
 };
 
 const OrderStatus = {
   "NEW": "NEW",
-  "COOKING": "COOKING",
-  "READY_FOR_PICKUP": "READY_FOR_PICKUP",
-  "PICKED_UP": "PICKED_UP",
-  "COMPLETED": "COMPLETED",
-  "ACCEPTED": "ACCEPTED"
+  "STORE_ACCEPTED": "STORE_ACCEPTED",
+  "STORE_DECLINED": "STORE_DECLINED",
+  "USER_PICKUP": "USER_PICKUP",
+  "USER_PICKEDUP": "USER_PICKEDUP",
+  "STORE_QUEUED": "STORE_QUEUED",
+  "STORE_INPROGRESS": "STORE_INPROGRESS",
+  "STORE_PROBLEM": "STORE_PROBLEM",
+  "STORE_READY": "STORE_READY",
+  "STORE_PICKUP": "STORE_PICKUP",
+  "STORE_PICKEDUP": "STORE_PICKEDUP",
+  "DELIVERED": "DELIVERED"
 };
 
-const { CartProduct, Product, OrderProduct, Courier, Cart, Order, Shop, User } = initSchema(schema);
+const { OrderItems, Product, ShoppingSession, CartItem, Courier, Order, Business, DeliveryFee, ServiceFee, User } = initSchema(schema);
 
 export {
-  CartProduct,
+  OrderItems,
   Product,
-  OrderProduct,
+  ShoppingSession,
+  CartItem,
   Courier,
-  Cart,
   Order,
-  Shop,
+  Business,
+  DeliveryFee,
+  ServiceFee,
   User,
-  TransportationModes,
+  ProductAvailable,
+  CourierOnline,
+  BusinessOnline,
   OrderStatus
 };
